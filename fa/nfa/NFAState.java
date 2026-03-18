@@ -1,7 +1,9 @@
 package fa.nfa;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Represents a state in a Non-deterministic Finite Automaton (NFA).
@@ -10,7 +12,7 @@ import java.util.Map;
 public class NFAState extends fa.State {
 
     // Map to store transitions: symbol -> next state
-    private Map<Character, NFAState> transitions;
+    private Map<Character, Set<NFAState>> transitions;
 
     /**
      * Constructor for NFAState.
@@ -27,15 +29,18 @@ public class NFAState extends fa.State {
      * @param nextState
      */
     public void addTransition(char symbol, NFAState nextState) {
-        transitions.put(symbol, nextState);
+        if (!transitions.containsKey(symbol)) {
+            transitions.put(symbol, new LinkedHashSet<>());
+        }
+        transitions.get(symbol).add(nextState);
+
     }
 
     /**
-     * Retrieves the next state for a given symbol.
-     * @param symbol
+     * Retrieves the next state for a given symbol.Set<NFASta@param symbol
      * @return
      */
-    public NFAState getTransitions(char symbol) {
+    public Set<NFAState> getTransitions(char symbol) {
         return transitions.get(symbol);
     }
 }

@@ -1,27 +1,29 @@
 package fa.nfa;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 import fa.State;
 
 public class NFA implements NFAInterface {
 
-    private NFAState Startstate;
-    private LinkedHashSet<NFAState> Finalstates;
-    private LinkedHashSet<NFAState> States;
-    private LinkedHashSet<Character> Sigma;
+    private NFAState startState;
+    private Set<NFAState> finalStates;
+    private Map<String, NFAState> states;
+    private LinkedHashSet<Character> sigma;
 
     public NFA() {
-        Finalstates = new LinkedHashSet<>();
-        States = new LinkedHashSet<>();
-        Sigma = new LinkedHashSet<>();
+        finalStates = new LinkedHashSet<>();
+        states = new LinkedHashMap<>();
+        sigma = new LinkedHashSet<>();
     }
 
     @Override
     public boolean addState(String name) {
         NFAState newState = new NFAState(name);
-        return States.add(newState);
+        return states.put(name, newState) == null;
     }
 
     @Override
@@ -43,36 +45,31 @@ public class NFA implements NFAInterface {
     }
 
     @Override
-    public boolean accepts(String s) {
+    public boolean accepts(String s) { // BFS preformed
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'accepts'");
     }
 
     @Override
     public Set<Character> getSigma() {
-        return Sigma;
+        return sigma;
     }
 
     @Override
     public State getState(String name) {
-        for (NFAState state : States) {
-            if (state.getName().equals(name)) {
-                return state;
-            }
-        }
-        return null; // State not found
+        return states.get(name);
     }
 
     @Override
     public boolean isFinal(String name) {
         NFAState state = (NFAState) getState(name);
-        return state != null && Finalstates.contains(state);
+        return state != null && finalStates.contains(state);
     }
 
     @Override
     public boolean isStart(String name) {
         NFAState state = (NFAState) getState(name);
-        return state != null && Startstate.equals(state);
+        return state != null && startState.equals(state);
     }
 
     @Override
@@ -82,7 +79,7 @@ public class NFA implements NFAInterface {
     }
 
     @Override
-    public Set<NFAState> eClosure(NFAState s) {
+    public Set<NFAState> eClosure(NFAState s) { // DFS preformed
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'eClosure'");
     }
