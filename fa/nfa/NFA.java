@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 import fa.State;
 
@@ -81,14 +82,24 @@ public class NFA implements NFAInterface {
 
     @Override
     public Set<NFAState> getToState(NFAState from, char onSymb) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getToState'");
+        return from.getTransitions(onSymb);
     }
 
     @Override
     public Set<NFAState> eClosure(NFAState s) { // DFS preformed
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eClosure'");
+        Set<NFAState> closure = new LinkedHashSet<>();
+        Stack<NFAState> stack = new Stack<>();
+        stack.push(s);
+        while (!stack.isEmpty()) {
+            stack.pop().getTransitions('e');
+            for (NFAState next : s.getTransitions('e')) {
+                if (!closure.contains(next)) {
+                    closure.add(next);
+                    stack.push(next);
+                }
+            }
+        }
+        return closure;
     }
 
     @Override
