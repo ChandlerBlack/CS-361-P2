@@ -28,20 +28,27 @@ public class NFA implements NFAInterface {
 
     @Override
     public boolean setFinal(String name) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setFinal'");
+        NFAState state = (NFAState) getState(name);
+        if (state != null) {
+            finalStates.add(state);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public boolean setStart(String name) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setStart'");
+        NFAState state = (NFAState) getState(name);
+        if (state != null) {
+            startState = state;
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void addSigma(char symbol) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addSigma'");
+        sigma.add(symbol);
     }
 
     @Override
