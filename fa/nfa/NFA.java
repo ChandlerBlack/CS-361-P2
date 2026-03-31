@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import fa.State;
-
 public class NFA implements NFAInterface {
 
     private NFAState startState;
@@ -54,8 +52,39 @@ public class NFA implements NFAInterface {
 
     @Override
     public boolean accepts(String s) { // BFS preformed
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'accepts'");
+        return Trace(s);
+    }
+
+    /**
+     * Breadth first traversal of the machine
+     * Can be modified for maxCopies, a potential solution is to return the maxCopies as negative when it isn't accepted (credit to Dean Cunningham)
+     * @return boolean, true when s is accepted
+     */
+    private boolean Trace(String s) {
+        Set<NFAState> copies = new LinkedHashSet<>();
+        copies.add(startState);
+        copies.addAll(eClosure(startState));
+
+        while (!s.isEmpty()) {
+            char read = s.charAt(0);
+            Set<NFAState> nextCopies = new LinkedHashSet<>();
+            
+            for (NFAState state : copies) {
+                nextCopies.addAll(getToState(state, read));
+                nextCopies.addAll(eClosure(state));
+            }
+
+            s = s.substring(1);
+            copies = nextCopies;
+        }
+
+        for (NFAState state : copies) {
+            if (finalStates.contains(state)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -64,19 +93,19 @@ public class NFA implements NFAInterface {
     }
 
     @Override
-    public State getState(String name) {
+    public NFAState getState(String name) {
         return states.get(name);
     }
 
     @Override
     public boolean isFinal(String name) {
-        NFAState state = (NFAState) getState(name);
+        NFAState state = getState(name);
         return state != null && finalStates.contains(state);
     }
 
     @Override
     public boolean isStart(String name) {
-        NFAState state = (NFAState) getState(name);
+        NFAState state = getState(name);
         return state != null && startState.equals(state);
     }
 
@@ -104,12 +133,18 @@ public class NFA implements NFAInterface {
 
     @Override
     public int maxCopies(String s) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'maxCopies'");
+        // // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'maxCopies'");
+        return 1;
     }
 
     @Override
     public boolean addTransition(String fromState, Set<String> toStates, char onSymb) {
+        // check that onSymb is in the language
+        if (!sigma.contains(onSymb) && onSymb != 'e') {
+            return false;
+        }
+
         NFAState from = (NFAState) getState(fromState);
         if (from == null) {
             return false; // From state does not exist
@@ -126,8 +161,9 @@ public class NFA implements NFAInterface {
 
     @Override
     public boolean isDFA() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isDFA'");
+        // // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'isDFA'");
+        return false;
     }
     
 }
