@@ -119,12 +119,15 @@ public class NFA implements NFAInterface {
         Set<NFAState> closure = new LinkedHashSet<>();
         Stack<NFAState> stack = new Stack<>();
         stack.push(s);
+        closure.add(s);
         while (!stack.isEmpty()) {
-            stack.pop().getTransitions('e');
-            for (NFAState next : s.getTransitions('e')) {
+            NFAState current = stack.pop();
+            for (NFAState next : current.getTransitions('e')) {
                 if (!closure.contains(next)) {
                     closure.add(next);
-                    stack.push(next);
+                    if (!stack.contains(next)) {
+                        stack.push(next);
+                    }
                 }
             }
         }

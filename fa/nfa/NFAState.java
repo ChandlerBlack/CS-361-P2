@@ -41,6 +41,11 @@ public class NFAState extends fa.State {
      * @return
      */
     public Set<NFAState> getTransitions(char symbol) {
-        return transitions.get(symbol);
+        if (transitions.containsKey(symbol)) {
+            return transitions.get(symbol);
+        }
+        else {
+            return new LinkedHashSet<>();
+        }
     }
 }
