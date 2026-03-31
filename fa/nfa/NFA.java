@@ -100,7 +100,15 @@ public class NFA implements NFAInterface {
     @Override
     public boolean isFinal(String name) {
         NFAState state = getState(name);
-        return state != null && finalStates.contains(state);
+
+        if (state != null) {
+            for (NFAState s : finalStates) {
+                if (s.getName().equals(name)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
