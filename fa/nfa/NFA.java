@@ -56,21 +56,11 @@ public class NFA implements NFAInterface {
 
     @Override
     public boolean accepts(String s) { // BFS preformed
-        return Trace(s);
-    }
-
-    /**
-     * Breadth first traversal of the machine
-     * Can be modified for maxCopies, a potential solution is to return the maxCopies as negative when it isn't accepted (credit to Dean Cunningham)
-     * @return boolean, true when s is accepted
-     */
-    private boolean Trace(String s) {
         Set<NFAState> copies = new LinkedHashSet<>();
         copies.add(getState(startState));
         copies.addAll(eClosure(getState(startState)));
 
-        while (!s.isEmpty()) {
-            char read = s.charAt(0);
+        for (char read : s.toCharArray()) {
             Set<NFAState> nextCopies = new LinkedHashSet<>();
             
             for (NFAState state : copies) {
@@ -80,7 +70,6 @@ public class NFA implements NFAInterface {
                 }
             }
 
-            s = s.substring(1);
             copies = nextCopies;
         }
 
