@@ -21,8 +21,12 @@ public class NFA implements NFAInterface {
 
     @Override
     public boolean addState(String name) {
+        if (states.containsKey(name)) {
+            return false;
+        }
         NFAState newState = new NFAState(name);
-        return states.put(name, newState) == null;
+        states.put(name, newState);
+        return true;
     }
 
     @Override
@@ -70,8 +74,10 @@ public class NFA implements NFAInterface {
             Set<NFAState> nextCopies = new LinkedHashSet<>();
             
             for (NFAState state : copies) {
-                nextCopies.addAll(getToState(state, read));
-                nextCopies.addAll(eClosure(state));
+                Set<NFAState> directTransitions = getToState(state, read);
+                for(NFAState nextState : directTransitions) {
+                    nextCopies.addAll(eClosure(nextState));
+                }
             }
 
             s = s.substring(1);
@@ -117,17 +123,18 @@ public class NFA implements NFAInterface {
     @Override
     public Set<NFAState> eClosure(NFAState s) { // DFS preformed
         Set<NFAState> closure = new LinkedHashSet<>();
+        if (s == null) return closure;
+
         Stack<NFAState> stack = new Stack<>();
         stack.push(s);
         closure.add(s);
+
         while (!stack.isEmpty()) {
             NFAState current = stack.pop();
             for (NFAState next : current.getTransitions('e')) {
                 if (!closure.contains(next)) {
                     closure.add(next);
-                    if (!stack.contains(next)) {
-                        stack.push(next);
-                    }
+                    stack.push(next);
                 }
             }
         }
@@ -138,9 +145,6 @@ public class NFA implements NFAInterface {
     public int maxCopies(String s) {
         Set<NFAState> currentStates = eClosure(startState);
         int max = currentStates.size();
-        if (!s.equals("e")) {
-            return max;
-        }
         for (char read : s.toCharArray()) {
             Set<NFAState> nextStates = new LinkedHashSet<>();
             for (NFAState state : currentStates) {
@@ -179,14 +183,15 @@ public class NFA implements NFAInterface {
     @Override
     public boolean isDFA() {
         for (NFAState state : states.values()) {
+            // DFA must have exactly one transition for every symbol in the alphabet
             for (char symbol : sigma) {
-                Set<NFAState> transitions = state.getTransitions(symbol);
-                if (transitions.size() > 1) {
+                if (state.getTransitions(symbol).size() != 1) {
                     return false;
                 }
             }
+            // DFA cannot have epsilon transitions
             if (!state.getTransitions('e').isEmpty()) {
-                return false; // Epsilon transition exists
+                return false;
             }
         }
         return true;
