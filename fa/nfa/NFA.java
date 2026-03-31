@@ -156,8 +156,10 @@ public class NFA implements NFAInterface {
         for (char read : s.toCharArray()) {
             Set<NFAState> nextStates = new LinkedHashSet<>();
             for (NFAState state : currentStates) {
-                nextStates.addAll(getToState(state, read));
-                nextStates.addAll(eClosure(state));
+                Set<NFAState> directTransitions = getToState(state, read);
+                for (NFAState nextState : directTransitions) {
+                    nextStates.addAll(eClosure(nextState));
+                }
             }
             currentStates = nextStates;
             if (currentStates.size() > max) {
