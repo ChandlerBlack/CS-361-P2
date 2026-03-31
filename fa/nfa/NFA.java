@@ -6,13 +6,24 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+/**
+ * Represents a Non-deterministic Finite Automaton (NFA).
+ * This class implements the NFAInterface and provides methods to define the states, transitions, and behavior of an NFA.
+ * Utilizes a map to store states and their transitions, allowing for efficient access and manipulation of the NFA's structure.
+ * @author ChandlerBlack
+ */
 public class NFA implements NFAInterface {
 
-    private String startState;
-    private Set<NFAState> finalStates;
-    private Map<String, NFAState> states;
-    private LinkedHashSet<Character> sigma;
+    private String startState; // Label of the start state
+    private Set<NFAState> finalStates; // Set of final states
+    private Map<String, NFAState> states; // Map of state labels to NFAState objects
+    private LinkedHashSet<Character> sigma; // Set of symbols in the NFA's alphabet
 
+    /**
+     * Constructor for NFA.
+     * Initializes the data structures for states, final states, and the alphabet (sigma).
+     * The NFA starts with no states, no final states, and an empty alphabet.
+     */
     public NFA() {
         finalStates = new LinkedHashSet<>();
         states = new LinkedHashMap<>();
@@ -22,7 +33,7 @@ public class NFA implements NFAInterface {
     @Override
     public boolean addState(String name) {
         if (states.containsKey(name)) {
-            return false;
+            return false; // State already exists
         }
         NFAState newState = new NFAState(name);
         states.put(name, newState);
@@ -34,7 +45,7 @@ public class NFA implements NFAInterface {
         NFAState state = (NFAState) getState(name);
         if (state != null) {
             finalStates.add(state);
-            return true;
+            return true; // State exists and is now a final state
         }
         return false;
     }
@@ -44,7 +55,7 @@ public class NFA implements NFAInterface {
         NFAState state = (NFAState) getState(name);
         if (state != null) {
             startState = name;
-            return true;
+            return true; // State exists and is now the start state
         }
         return false;
     }
@@ -75,7 +86,7 @@ public class NFA implements NFAInterface {
 
         for (NFAState state : copies) {
             if (finalStates.contains(state)) {
-                return true;
+                return true; // At least one copy is in a final state, so the string is accepted
             }
         }
 
@@ -99,7 +110,7 @@ public class NFA implements NFAInterface {
         if (state != null) {
             for (NFAState s : finalStates) {
                 if (s.getName().equals(name)) {
-                    return true;
+                    return true; // State exists and is a final state
                 }
             }
         }
@@ -120,7 +131,7 @@ public class NFA implements NFAInterface {
     @Override
     public Set<NFAState> eClosure(NFAState s) { // DFS preformed
         Set<NFAState> closure = new LinkedHashSet<>();
-        if (s == null) return closure;
+        if (s == null) return closure; // Return empty set if the input state is null
 
         Stack<NFAState> stack = new Stack<>();
         stack.push(s);

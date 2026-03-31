@@ -7,6 +7,8 @@ import java.util.Set;
 
 /**
  * Represents a state in a Non-deterministic Finite Automaton (NFA).
+ * This class extends the generic State class and includes additional functionality
+ * to handle multiple transitions for the same input symbol, which is a key feature of NFAs.
  * @author ChandlerBlack
  */
 public class NFAState extends fa.State {
@@ -16,7 +18,8 @@ public class NFAState extends fa.State {
 
     /**
      * Constructor for NFAState.
-     * @param name
+     * Initializes the state with a name and an empty set of transitions.
+     * @param name the label of the state
      */
     public NFAState(String name) {
         super(name);
@@ -25,8 +28,8 @@ public class NFAState extends fa.State {
 
     /**
      * Adds a transition from this state to the next state on the given symbol.
-     * @param symbol
-     * @param nextState
+     * @param symbol the input symbol for the transition
+     * @param nextState the state to transition to on the given symbol
      */
     public void addTransition(char symbol, NFAState nextState) {
         if (!transitions.containsKey(symbol)) {
@@ -37,8 +40,9 @@ public class NFAState extends fa.State {
     }
 
     /**
-     * Retrieves the next state for a given symbol.Set<NFASta@param symbol
-     * @return
+     * Retrieves the next state for a given symbol.
+     * @param symbol the input symbol for the transition
+     * @return the next state for the given symbol, or null if no transition exists
      */
     public Set<NFAState> getTransitions(char symbol) {
         if (transitions.containsKey(symbol)) {
@@ -49,6 +53,11 @@ public class NFAState extends fa.State {
         }
     }
 
+    /**
+     * Overrides the equals method to compare NFAState objects based on their names.
+     * @param obj the object to compare with
+     * @return true if the names of the states are equal, false otherwise
+     */
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
