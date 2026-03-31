@@ -10,7 +10,7 @@ import java.util.Stack;
  * Represents a Non-deterministic Finite Automaton (NFA).
  * This class implements the NFAInterface and provides methods to define the states, transitions, and behavior of an NFA.
  * Utilizes a map to store states and their transitions, allowing for efficient access and manipulation of the NFA's structure.
- * @author ChandlerBlack
+ * @author ChandlerBlack, RhysJordan
  */
 public class NFA implements NFAInterface {
 
