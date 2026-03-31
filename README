@@ -1,1 +1,69 @@
+****************
 # CS-361-P2
+* CS 361
+* 3/30/2026
+* Chandler Black, Rhys Jordan
+****************
+
+## OVERVIEW:
+NFA.java models a Nondeterministic Finite Automata. 
+
+## INCLUDED FILES:
+|-- fa
+|   |-- FAInterface.java        - High level finite automata interface
+|   |-- State.java              - Finite automata abstract class
+|   |-- nfa
+|       |-- NFA.java            - Implementation of NFAInterface
+|       |-- NFAInterface.java   - Nondeterministic finite automata interface
+|       |-- NFAState.java       - Nondeterministic finite automata state class
+|-- test
+|   |-- nfa
+|      |-- NFATest.java         - Testing and driver class
+|-- README                      - this file
+
+## COMPILING AND RUNNING:
+The test class is the driver for this program. You must have JUNIT installed to run the test class.
+
+From the directory containing all source files, compile the
+driver class (and all dependencies) with the command:
+
+```bash
+javac -cp .:/usr/share/java/junit.jar ./test/nfa/NFATest.java
+```
+
+### To Run:
+Run the compiled class file with the command:
+```bash 
+java -cp .:/usr/share/java/junit.jar:/usr/share/java/hamcrest/hamcrest.jar org.junit.runner.JUnitCore test.nfa.NFATest
+```
+Console output will give the test results after the program finishes.
+
+## PROGRAM DESIGN AND IMPORTANT CONCEPTS:
+### Inheritance Structure
+```
+FAInterface
+|
+NFAInterface    State
+|               |
+NFA ---Uses---> NFAState
+```
+`NFA` is a java representation of a Nondeterministic Finite Automata.
+`NFAState` is a utility class that represents different states that a NFA can be in.
+
+`NFA` uses `LinkedHashSet`s to store a NFA's states, alphabet, and final states. We chose to use `LinkedHashSet` to preserve the insertion order. `NFAState` uses a `Map` to track transitions. 
+
+## TESTING:
+As we programmed we would run the tests in NFATest.java to ensure that the changes we made behaved as was expected. Due to time constraints we did not end up writing any of our own tests. 
+
+All of the provided tests were ran and passed. 
+
+## DISCUSSION:
+We were a lot better at managing our time and communicating this project.
+
+For the programming we struggled with the fact that the hashmap storing our states was not returing a persistent reference. This meant that transitions were not being added to our startState instance variable when they were added to the state stored in the hashmap. We solved this by storing the startState's name and retrieving the actual state data from the map when we needed it. We're not super happy with this implementation but it works. 
+
+## EXTRA CREDIT:
+No extra credit :((
+
+## SOURCES:
+Just our own stupidity and willpower (2026)
