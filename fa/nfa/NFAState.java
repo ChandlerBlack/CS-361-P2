@@ -7,9 +7,7 @@ import java.util.Set;
 
 /**
  * Represents a state in a Non-deterministic Finite Automaton (NFA).
- * This class extends the generic State class and includes additional functionality
- * to handle multiple transitions for the same input symbol, which is a key feature of NFAs.
- * @author ChandlerBlack
+ * @author ChandlerBlack, RhysJordan
  */
 public class NFAState extends fa.State {
 
@@ -40,9 +38,8 @@ public class NFAState extends fa.State {
     }
 
     /**
-     * Retrieves the next state for a given symbol.
-     * @param symbol the input symbol for the transition
-     * @return the next state for the given symbol, or null if no transition exists
+     * Retrieves the next state for a given symbol @param symbol
+     * @return
      */
     public Set<NFAState> getTransitions(char symbol) {
         if (transitions.containsKey(symbol)) {
