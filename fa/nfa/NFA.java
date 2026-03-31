@@ -8,7 +8,7 @@ import java.util.Stack;
 
 public class NFA implements NFAInterface {
 
-    private NFAState startState;
+    private String startState;
     private Set<NFAState> finalStates;
     private Map<String, NFAState> states;
     private LinkedHashSet<Character> sigma;
@@ -39,7 +39,7 @@ public class NFA implements NFAInterface {
     public boolean setStart(String name) {
         NFAState state = (NFAState) getState(name);
         if (state != null) {
-            startState = state;
+            startState = name;
             return true;
         }
         return false;
@@ -62,8 +62,8 @@ public class NFA implements NFAInterface {
      */
     private boolean Trace(String s) {
         Set<NFAState> copies = new LinkedHashSet<>();
-        copies.add(startState);
-        copies.addAll(eClosure(startState));
+        copies.add(getState(startState));
+        copies.addAll(eClosure(getState(startState)));
 
         while (!s.isEmpty()) {
             char read = s.charAt(0);
@@ -106,7 +106,7 @@ public class NFA implements NFAInterface {
     @Override
     public boolean isStart(String name) {
         NFAState state = getState(name);
-        return state != null && startState.equals(state);
+        return state != null && getState(startState).getName().equals(name);
     }
 
     @Override
@@ -136,7 +136,7 @@ public class NFA implements NFAInterface {
 
     @Override
     public int maxCopies(String s) {
-        Set<NFAState> currentStates = eClosure(startState);
+        Set<NFAState> currentStates = eClosure(getState(startState));
         int max = currentStates.size();
         if (!s.equals("e")) {
             return max;

@@ -48,4 +48,17 @@ public class NFAState extends fa.State {
             return new LinkedHashSet<>();
         }
     }
+
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        } 
+
+        NFAState state = (NFAState) obj;
+        return this.getName().equals(state.getName());
+    }
 }
