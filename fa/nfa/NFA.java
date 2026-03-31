@@ -136,9 +136,23 @@ public class NFA implements NFAInterface {
 
     @Override
     public int maxCopies(String s) {
-        // // TODO Auto-generated method stub
-        // throw new UnsupportedOperationException("Unimplemented method 'maxCopies'");
-        return 1;
+        Set<NFAState> currentStates = eClosure(startState);
+        int max = currentStates.size();
+        if (!s.equals("e")) {
+            return max;
+        }
+        for (char read : s.toCharArray()) {
+            Set<NFAState> nextStates = new LinkedHashSet<>();
+            for (NFAState state : currentStates) {
+                nextStates.addAll(getToState(state, read));
+                nextStates.addAll(eClosure(state));
+            }
+            currentStates = nextStates;
+            if (currentStates.size() > max) {
+                max = currentStates.size();
+            }
+        }
+        return max;
     }
 
     @Override
@@ -164,9 +178,18 @@ public class NFA implements NFAInterface {
 
     @Override
     public boolean isDFA() {
-        // // TODO Auto-generated method stub
-        // throw new UnsupportedOperationException("Unimplemented method 'isDFA'");
-        return false;
+        for (NFAState state : states.values()) {
+            for (char symbol : sigma) {
+                Set<NFAState> transitions = state.getTransitions(symbol);
+                if (transitions.size() > 1) {
+                    return false;
+                }
+            }
+            if (!state.getTransitions('e').isEmpty()) {
+                return false; // Epsilon transition exists
+            }
+        }
+        return true;
     }
     
 }
